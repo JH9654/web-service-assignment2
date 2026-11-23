@@ -14,7 +14,10 @@ export function createRepository(db) {
     existing(eventId,userId) { return db.prepare(selection+' WHERE a.event_id=? AND a.user_id=?').get(eventId,userId); },
     mine(userId) { return db.prepare(selection+' WHERE a.user_id=? ORDER BY a.id DESC').all(userId); },
     forEvent(eventId) { return db.prepare(selection+' WHERE a.event_id=? ORDER BY a.id').all(eventId); },
-    approvedCount(eventId) { return db.prepare("SELECT COUNT(*) AS n FROM applications WHERE event_id=? AND status='APPROVED'").get(eventId).n; },
+    approvedCount(eventId) { return db.prepare("SELECT COUNT(*) AS n FROM applications WHERE event_id=? AND status='APPROVED'").get(eventId).n; },  
+    nextPending(eventId) {
+      return db.prepare(selection + " WHERE a.event_id=? AND a.status='PENDING' ORDER BY a.created_at ASC, a.id ASC LIMIT 1").get(eventId);
+    },
     insert(eventId,userId) { const r=db.prepare("INSERT INTO applications(event_id,user_id,status) VALUES (?,?,'PENDING')").run(eventId,userId); return this.application(Number(r.lastInsertRowid)); },
     // 대기 순서와 이력 저장 시점, 트랜잭션 경계는 서비스에서 결정합니다.
     history(id) { return db.prepare(`SELECT id,application_id AS applicationId,actor_id AS actorId,
