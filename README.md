@@ -98,12 +98,46 @@ npm run db:reset
 - `tests/`: 기반·필수·선택 심화 테스트
 - `docs/API.md`: 상태·이력·입출력 계약
 
-## 제출 전 작성할 내용
+## 제출 정보
 
-이 부분을 본인의 서비스 소개, 변경 파일, 구현 완료 여부, 실행 환경, 알려진 문제, 보고서·검증 증거 링크와 AI 사용 요약으로 바꾸세요. GitHub URL·커밋 SHA를 LMS에 제출하고 보고서 PDF를 저장소 `docs/report.pdf`와 LMS에 같은 버전으로 첨부합니다.
+- 작성자: [202212941] [박준호]
+- 서비스: 캠퍼스 신청 서비스 (제공 화면 사용, 주제 변경 없음)
+- 실행 환경: Windows [11 HOME], Node.js [v24.13.0], npm [11.6.2]
 
-`node_modules`, 생성 DB·서명 키, 실제 `.env`·JWT와 개인 정보는 제출하지 않습니다. 제공 코드와 직접 구현한 부분을 구분합니다.
+## 구현 완료 여부
 
+| 항목 | 결과 |
+|---|---|
+| TODO-01 apply (신청) | 완료 |
+| TODO-02 cancel (대기 취소) | 완료 |
+| TODO-03 approve (직접 승인) | 완료 |
+| TODO-04 revoke (승인 취소 + 자동 승급) | 완료 |
+| `npm test` 기반 테스트 | 4 / 4 통과 |
+| `npm run test:assignment` 필수 테스트 | 32 / 32 통과 |
+| 화면 검증 U01~U05 | 완료 (보고서 7장) |
+| `npm run test:advanced` 선택 심화 | [미수행] |
+
+## 변경한 파일
+
+| 파일 | 변경 내용 |
+|---|---|
+| `src/application-service.js` | 트랜잭션 도우미 `inTransaction` 추가, `apply`·`cancel`·`approve`·`revoke` 구현 |
+| `src/repository.js` | 자동 승급 대상 조회 함수 `nextPending` 추가 |
+| `README.md` | 제출 정보 작성 |
+| `docs/report.pdf` | 보고서 |
+
+그 외 파일은 제공 코드 그대로입니다.
+
+## 알려진 문제
+
+- OneDrive 동기화 폴더에서 실행하면 `npm run db:reset` 시 DB 파일이 잠겨 초기화되지 않을 수 있습니다.
+  이 경우 서버(node)를 모두 종료한 뒤 `data/app.sqlite`, `data/app.sqlite-wal`, `data/app.sqlite-shm`을 삭제하고 `npm start`를 실행하면 새 DB가 생성됩니다.
+
+## AI 사용 요약
+
+Claude(Anthropic, Claude Opus 5.5)를 사용했습니다. 과제 요구사항 정리, TODO 구현 방향과 코드 초안,
+화면 검증 절차 안내에 활용했습니다. 모든 코드는 직접 입력·이해한 뒤 `npm run test:assignment`와
+화면 검증 U01~U05로 확인했습니다. 자세한 내용은 보고서 "AI 활용과 참고 자료"에 있습니다.
 ## 참고 문서
 
 - [Node.js SQLite](https://nodejs.org/docs/latest-v24.x/api/sqlite.html)
